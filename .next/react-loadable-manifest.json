@@ -1,0 +1,56 @@
+{
+  "pages\\index.tsx -> @/components/layout/Footer": {
+    "id": "pages\\index.tsx -> @/components/layout/Footer",
+    "files": [
+      "static/chunks/src_components_layout_Footer_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/layout/Header": {
+    "id": "pages\\index.tsx -> @/components/layout/Header",
+    "files": [
+      "static/chunks/src_components_layout_Header_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/sections/AboutSection": {
+    "id": "pages\\index.tsx -> @/components/sections/AboutSection",
+    "files": [
+      "static/chunks/src_components_sections_AboutSection_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/sections/ContactSection": {
+    "id": "pages\\index.tsx -> @/components/sections/ContactSection",
+    "files": [
+      "static/chunks/src_components_sections_ContactSection_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/sections/HeroSection": {
+    "id": "pages\\index.tsx -> @/components/sections/HeroSection",
+    "files": [
+      "static/chunks/src_components_sections_HeroSection_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/sections/ServicesSection": {
+    "id": "pages\\index.tsx -> @/components/sections/ServicesSection",
+    "files": [
+      "static/chunks/src_components_sections_ServicesSection_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/sections/TestimonialsSection": {
+    "id": "pages\\index.tsx -> @/components/sections/TestimonialsSection",
+    "files": [
+      "static/chunks/src_components_sections_TestimonialsSection_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/ui/FloatingButtons": {
+    "id": "pages\\index.tsx -> @/components/ui/FloatingButtons",
+    "files": [
+      "static/chunks/src_components_ui_FloatingButtons_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/ui/LoadingSpinner": {
+    "id": "pages\\index.tsx -> @/components/ui/LoadingSpinner",
+    "files": [
+      "static/chunks/src_components_ui_LoadingSpinner_tsx.js"
+    ]
+  }
+}
