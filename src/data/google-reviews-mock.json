@@ -1,0 +1,52 @@
+[
+  {
+    "author_name": "Yorum Yapan Adı 1",
+    "author_url": "https://www.google.com/maps/contrib/...",
+    "language": "tr",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjX02uyXKBGsiHaQDcb0vCe3ve8kiCmaJBX-ga3fd8Rx-h6YN_ps=s128-c0x00000000-cc-rp-mo",
+    "rating": 5,
+    "relative_time_description": "2 hafta önce",
+    "text": "Harika hizmet! Çok memnun kaldım. Teşekkürler.",
+    "time": 1678886400
+  },
+  {
+    "author_name": "Yorum Yapan Adı 2",
+    "author_url": "https://www.google.com/maps/contrib/...",
+    "language": "tr",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjX02uyXKBGsiHaQDcb0vCe3ve8kiCmaJBX-ga3fd8Rx-h6YN_ps=s128-c0x00000000-cc-rp-mo",
+    "rating": 4,
+    "relative_time_description": "1 ay önce",
+    "text": "Genel olarak iyiydi, küçük bir iki eksik vardı ama memnun kaldık.",
+    "time": 1676294400
+  },
+  {
+    "author_name": "Yorum Yapan Adı 3",
+    "author_url": "https://www.google.com/maps/contrib/...",
+    "language": "tr",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjX02uyXKBGsiHaQDcb0vCe3ve8kiCmaJBX-ga3fd8Rx-h6YN_ps=s128-c0x00000000-cc-rp-mo",
+    "rating": 5,
+    "relative_time_description": "3 ay önce",
+    "text": "Profesyonel yaklaşım ve hızlı çözümler için teşekkür ederiz. Kesinlikle tavsiye ederim!",
+    "time": 1673616000
+  },
+  {
+    "author_name": "Yorum Yapan Adı 4",
+    "author_url": "https://www.google.com/maps/contrib/...",
+    "language": "tr",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjX02uyXKBGsiHaQDcb0vCe3ve8kiCmaJBX-ga3fd8Rx-h6YN_ps=s128-c0x00000000-cc-rp-mo",
+    "rating": 3,
+    "relative_time_description": "5 ay önce",
+    "text": "Beklentilerimi tam olarak karşılamadı, ama fena değildi. Geliştirilebilir.",
+    "time": 1668432000
+  },
+  {
+    "author_name": "Yorum Yapan Adı 5",
+    "author_url": "https://www.google.com/maps/contrib/...",
+    "language": "tr",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjX02uyXKBGsiHaQDcb0vCe3ve8kiCmaJBX-ga3fd8Rx-h6YN_ps=s128-c0x00000000-cc-rp-mo",
+    "rating": 5,
+    "relative_time_description": "8 ay önce",
+    "text": "Mükemmel iletişim ve destek. Tüm süreç sorunsuz ilerledi. Teşekkürler Gürel Yönetim!",
+    "time": 1660656000
+  }
+] 

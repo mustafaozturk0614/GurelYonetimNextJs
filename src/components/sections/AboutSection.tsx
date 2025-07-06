@@ -1,7 +1,8 @@
-import { Award, Briefcase, Shield, Search, Handshake, Rocket, Users, MessageSquare, Target, GraduationCap, Heart, ShieldCheck, MapPin, CheckCircle, Phone, Mail, ArrowRight, Star, Zap, TrendingUp } from 'lucide-react'
+import { Award, Briefcase, Shield, Search, Handshake, Rocket, Users, MessageSquare, Target, GraduationCap, Heart, ShieldCheck, MapPin, Phone, Mail, Star, Zap, ChevronRight, TrendingUp, Calendar, Clock } from 'lucide-react'
 import { regions } from '@/data/company'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 // Tab içeriği için interface
 interface TabContent {
@@ -9,13 +10,12 @@ interface TabContent {
   icon: JSX.Element;
   content: string;
   color: string;
+  stats?: { label: string; value: string }[];
 }
 
 const AboutSection = () => {
-  const [serviceAreaInput, setServiceAreaInput] = useState('')
-  const [serviceAreaResult, setServiceAreaResult] = useState<{ found: boolean; message: string } | null>(null)
   const [activeTab, setActiveTab] = useState('mission')
-  const [scrollY, setScrollY] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
 
   // Tab sistemi için yeni state'ler
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -25,52 +25,44 @@ const AboutSection = () => {
   // Gesture kontrolü için minimum mesafe
   const minSwipeDistance = 50
 
+  // Sayfa yüklendiğinde animasyon tetikleme
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const timer = setTimeout(() => setIsVisible(true), 100)
+    return () => clearTimeout(timer)
   }, [])
-
-  const checkServiceArea = () => {
-    const input = serviceAreaInput.toLowerCase().trim()
-    const found = regions.some(region => region.toLowerCase().includes(input) || input.includes(region.toLowerCase()))
-    
-    setServiceAreaResult({
-      found,
-      message: found 
-        ? `Harika! ${input} bölgesinde hizmet veriyoruz. Hemen iletişime geçin!`
-        : `Üzgünüz, ${input} bölgesinde henüz hizmet vermiyoruz. Ancak yakın gelecekte genişleme planlarımız var.`
-    })
-  }
 
   const principles = [
     {
-      icon: <Search className="w-7 h-7" />,
+      icon: <Search className="w-6 h-6" />,
       title: "Şeffaflık",
-      description: "Tüm finansal işlemlerde tam şeffaflık, hesap verilebilirlik ve düzenli raporlama ile güven oluşturuyoruz",
+      description: "Tüm finansal işlemlerde tam şeffaflık, hesap verilebilirlik ve düzenli raporlama ile güven oluşturuyoruz.",
       color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50"
+      bgColor: "bg-blue-50",
+      stats: "100% Açık Muhasebe"
     },
     {
-      icon: <Handshake className="w-7 h-7" />,
+      icon: <Handshake className="w-6 h-6" />,
       title: "Güvenilirlik", 
-      description: "Taahhüt ettiğimiz hizmetleri zamanında, eksiksiz ve kaliteli bir şekilde sunarak güven ilişkisi kuruyoruz",
+      description: "Taahhüt ettiğimiz hizmetleri zamanında, eksiksiz ve kaliteli bir şekilde sunarak güven ilişkisi kuruyoruz.",
       color: "from-emerald-500 to-teal-500",
-      bgColor: "bg-emerald-50"
+      bgColor: "bg-emerald-50",
+      stats: "7/24 Destek"
     },
     {
-      icon: <Award className="w-7 h-7" />,
+      icon: <Award className="w-6 h-6" />,
       title: "Profesyonellik",
-      description: "Sektör deneyimi, uzman kadro ve sürekli eğitimle desteklenen kaliteli hizmet anlayışımız",
+      description: "Sektör deneyimi, uzman kadro ve sürekli eğitimle desteklenen kaliteli hizmet anlayışımız.",
       color: "from-purple-500 to-indigo-500",
-      bgColor: "bg-purple-50"
+      bgColor: "bg-purple-50",
+      stats: "3+ Yıl Deneyim"
     },
     {
-      icon: <Rocket className="w-7 h-7" />,
+      icon: <Rocket className="w-6 h-6" />,
       title: "Yenilikçilik",
-      description: "Modern teknoloji, dijital çözümler ve sürekli gelişen yönetim yaklaşımlarıyla hizmet sunuyoruz",
+      description: "Modern teknoloji, dijital çözümler ve sürekli gelişen yönetim yaklaşımlarıyla hizmet sunuyoruz.",
       color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-50"
+      bgColor: "bg-orange-50",
+      stats: "Dijital Çözümler"
     }
   ]
 
@@ -79,92 +71,90 @@ const AboutSection = () => {
       number: 1,
       title: "Keşif ve Analiz",
       description: "Siteyi ziyaret eder, mevcut durumu analiz eder ve ihtiyaçları belirleriz.",
-      icon: <Search className="w-8 h-8" />,
-      color: "from-blue-500 to-cyan-500"
+      icon: <Search className="w-6 h-6" />,
+      color: "from-blue-500 to-cyan-500",
+      time: "1-2 Gün"
     },
     {
       number: 2,
       title: "Teklif ve Sözleşme", 
       description: "İhtiyaçlara özel çözüm paketi ve fiyat teklifi sunar, detaylı sözleşme hazırlarız.",
-      icon: <Briefcase className="w-8 h-8" />,
-      color: "from-emerald-500 to-teal-500"
+      icon: <Briefcase className="w-6 h-6" />,
+      color: "from-emerald-500 to-teal-500",
+      time: "2-3 Gün"
     },
     {
       number: 3,
       title: "Devir İşlemleri",
       description: "Resmi evraklar, hesaplar, anahtar teslimi ve personel devrini gerçekleştiririz.",
-      icon: <Shield className="w-8 h-8" />,
-      color: "from-purple-500 to-indigo-500"
+      icon: <Shield className="w-6 h-6" />,
+      color: "from-purple-500 to-indigo-500",
+      time: "1 Hafta"
     },
     {
       number: 4,
       title: "Sistem Kurulumu",
       description: "Dijital yönetim sistemi kurulumu, finansal yapılandırma ve veri girişini tamamlarız.",
-      icon: <Award className="w-8 h-8" />,
-      color: "from-orange-500 to-red-500"
+      icon: <Award className="w-6 h-6" />,
+      color: "from-orange-500 to-red-500",
+      time: "3-5 Gün"
     },
     {
       number: 5,
       title: "Aktif Yönetim",
       description: "Profesyonel yönetim, düzenli raporlama ve sürekli iletişim ile hizmet sunarız.",
-      icon: <Target className="w-8 h-8" />,
-      color: "from-pink-500 to-rose-500"
+      icon: <Target className="w-6 h-6" />,
+      color: "from-pink-500 to-rose-500",
+      time: "Sürekli"
     }
   ]
 
   const cultureValues = [
     {
-      icon: <Users className="w-10 h-10" />,
+      icon: <Users className="w-8 h-8" />,
       title: "Ekip Çalışması",
-      description: "Her çalışanımız değerli bir takım üyesidir. Birlikte çalışarak, birbirimizi destekleyerek ve sürekli bilgi paylaşımıyla en iyi sonuçları elde ederiz. Takım ruhu ve işbirliği kültürümüzle başarıya ulaşıyoruz.",
+      description: "Her çalışanımız değerli bir takım üyesidir. Birlikte çalışarak, birbirimizi destekleyerek ve sürekli bilgi paylaşımıyla en iyi sonuçları elde ederiz.",
       color: "from-blue-500 to-cyan-500",
       bgPattern: "bg-gradient-to-br from-blue-50 to-cyan-50"
     },
     {
-      icon: <MessageSquare className="w-10 h-10" />,
+      icon: <MessageSquare className="w-8 h-8" />,
       title: "Açık İletişim",
-      description: "Müşterilerimiz, çalışanlarımız ve iş ortaklarımızla her zaman açık, dürüst ve şeffaf iletişim kurarız. İletişimde samimiyet ve güven temel değerlerimizdir.",
+      description: "Müşterilerimiz, çalışanlarımız ve iş ortaklarımızla her zaman açık, dürüst ve şeffaf iletişim kurarız.",
       color: "from-emerald-500 to-teal-500",
       bgPattern: "bg-gradient-to-br from-emerald-50 to-teal-50"
     },
     {
-      icon: <Target className="w-10 h-10" />,
+      icon: <Target className="w-8 h-8" />,
       title: "Sonuç Odaklılık",
-      description: "Karşılaştığımız her soruna çözüm üretir, belirlediğimiz hedeflere ulaşmak için stratejik ve sistematik adımlar atarız. Başarı odaklı yaklaşımımızla fark yaratıyoruz.",
+      description: "Karşılaştığımız her soruna çözüm üretir, belirlediğimiz hedeflere ulaşmak için stratejik ve sistematik adımlar atarız.",
       color: "from-purple-500 to-indigo-500",
       bgPattern: "bg-gradient-to-br from-purple-50 to-indigo-50"
     },
     {
-      icon: <GraduationCap className="w-10 h-10" />,
+      icon: <GraduationCap className="w-8 h-8" />,
       title: "Sürekli Gelişim",
-      description: "Sektördeki yenilikleri takip eder, düzenli eğitimlerle kendimizi sürekli geliştiririz. Her deneyimi öğrenme fırsatı olarak görür, gelişime açık yaklaşımımızla ilerleriz.",
+      description: "Sektördeki yenilikleri takip eder, düzenli eğitimlerle kendimizi sürekli geliştiririz.",
       color: "from-orange-500 to-red-500",
       bgPattern: "bg-gradient-to-br from-orange-50 to-red-50"
     },
     {
-      icon: <Heart className="w-10 h-10" />,
+      icon: <Heart className="w-8 h-8" />,
       title: "Müşteri Memnuniyeti",
-      description: "Her kararımızda müşteri memnuniyetini ön planda tutar, beklentileri aşmak için çalışırız. Müşteri odaklı hizmet anlayışımızla uzun vadeli ilişkiler kurarız.",
+      description: "Her kararımızda müşteri memnuniyetini ön planda tutar, beklentileri aşmak için çalışırız.",
       color: "from-pink-500 to-rose-500",
       bgPattern: "bg-gradient-to-br from-pink-50 to-rose-50"
     },
     {
-      icon: <ShieldCheck className="w-10 h-10" />,
+      icon: <ShieldCheck className="w-8 h-8" />,
       title: "Güvenilirlik",
-      description: "Sözlerimizi tutar, sorumluluklarımızı zamanında ve eksiksiz yerine getiririz. Güvenilirlik en temel değerimiz olup, tüm işlerimizde dürüstlük ve tutarlılık gösteririz.",
+      description: "Sözlerimizi tutar, sorumluluklarımızı zamanında ve eksiksiz yerine getiririz.",
       color: "from-slate-500 to-gray-500",
       bgPattern: "bg-gradient-to-br from-slate-50 to-gray-50"
     }
   ]
 
-  const stats = [
-    { number: "2+", label: "Yıl Deneyim", icon: <Star className="w-6 h-6" /> },
-    { number: "25+", label: "Mutlu Müşteri", icon: <Heart className="w-6 h-6" /> },
-    { number: "15+", label: "Yönetilen Site", icon: <Shield className="w-6 h-6" /> },
-    { number: "24/7", label: "Destek Hizmeti", icon: <Zap className="w-6 h-6" /> }
-  ]
-
-  // Tab sistemi için yeni state'ler
+  // Tab sistemi için touch event'ler
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
     setTouchStart(e.targetTouches[0].clientX)
@@ -189,70 +179,95 @@ const AboutSection = () => {
     }
   }
 
-  // Tab içerikleri
+  // Tab içerikleri - İyileştirilmiş
   const tabContents: Record<string, TabContent> = {
     mission: {
       title: "Misyonumuz",
-      icon: <Target className="w-6 h-6" />,
+      icon: <Target className="w-5 h-5" />,
       content: "Profesyonel site yönetimi alanında yenilikçi çözümler sunarak, site sakinlerinin yaşam kalitesini artırmak ve mülk değerlerini korumak için çalışıyoruz.",
-      color: "from-blue-600 to-indigo-600"
+      color: "from-blue-600 to-indigo-600",
+      stats: [
+        { label: "Aktif Site", value: "50+" },
+        { label: "Memnun Müşteri", value: "500+" }
+      ]
     },
     vision: {
       title: "Vizyonumuz",
-      icon: <Star className="w-6 h-6" />,
+      icon: <Star className="w-5 h-5" />,
       content: "Türkiye'nin önde gelen profesyonel site yönetim şirketi olmak ve sektörde dijital dönüşümün öncüsü olmayı hedefliyoruz.",
-      color: "from-purple-600 to-pink-600"
+      color: "from-purple-600 to-pink-600",
+      stats: [
+        { label: "Hedef Büyüme", value: "%200" },
+        { label: "Yeni Teknoloji", value: "AI & IoT" }
+      ]
     }
   }
 
-  // Tab sistemi render kodu
+  // Tab sistemi render kodu - İyileştirilmiş
   const renderTabs = () => (
     <div 
       ref={tabContainerRef}
-      className="w-full max-w-2xl mx-auto mb-12"
+      className="w-full max-w-4xl mx-auto mb-12"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Tab Butonları */}
-      <div className="flex gap-4 mb-8 p-2 bg-white/50 backdrop-blur-sm rounded-full shadow-lg">
+      {/* Tab Butonları - Modern tasarım */}
+      <div className="flex gap-2 mb-8 p-1 bg-white/60 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
         {Object.entries(tabContents).map(([key, { title, icon }]) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-full text-sm font-semibold transition-all duration-300 ${
+            className={`flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-sm font-semibold transition-all duration-500 ${
               activeTab === key
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg scale-105'
-                : 'text-slate-600 hover:bg-white/50'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg scale-[1.02] shadow-blue-500/25'
+                : 'text-slate-600 hover:bg-white/50 hover:text-slate-800'
             }`}
           >
+            <span className={`transition-transform duration-300 ${activeTab === key ? 'scale-110' : ''}`}>
             {icon}
+            </span>
             {title}
           </button>
         ))}
       </div>
 
-      {/* Tab İçeriği */}
+      {/* Tab İçeriği - Gelişmiş tasarım */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/20"
         >
-          <div className="flex items-start gap-4">
-            <div className={`flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r ${tabContents[activeTab].color} flex items-center justify-center text-white shadow-lg`}>
+          <div className="flex flex-col lg:flex-row items-start gap-6">
+            <div className="flex-shrink-0">
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${tabContents[activeTab].color} flex items-center justify-center text-white shadow-lg`}>
               {tabContents[activeTab].icon}
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+            
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
                 {tabContents[activeTab].title}
               </h3>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-600 leading-relaxed text-lg mb-6">
                 {tabContents[activeTab].content}
               </p>
+              
+              {/* İstatistikler */}
+              {tabContents[activeTab].stats && (
+                <div className="flex flex-wrap gap-4">
+                  {tabContents[activeTab].stats!.map((stat, index) => (
+                    <div key={index} className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                      <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
+                      <div className="text-sm text-slate-600">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
@@ -262,235 +277,265 @@ const AboutSection = () => {
 
   return (
     <section id="about" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 py-20">
-      {/* Animated Background Orbs */}
+      {/* Gelişmiş Arka Plan Efektleri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/15 to-cyan-400/15 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-purple-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-emerald-400/15 to-teal-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
       </div>
 
-      {/* Floating Geometric Shapes */}
+      {/* Floating Geometric Shapes - Daha zarif */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-4 h-4 bg-blue-500/30 rotate-45 animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-        <div className="absolute top-40 right-20 w-6 h-6 bg-purple-500/30 rounded-full animate-bounce" style={{ animationDelay: '0.7s' }}></div>
-        <div className="absolute bottom-40 left-20 w-3 h-3 bg-emerald-500/30 rotate-45 animate-bounce" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-20 right-40 w-5 h-5 bg-orange-500/30 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute top-20 left-10 w-3 h-3 bg-blue-500/20 rotate-45 animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+        <div className="absolute top-40 right-20 w-4 h-4 bg-purple-500/20 rounded-full animate-bounce" style={{ animationDelay: '0.7s' }}></div>
+        <div className="absolute bottom-40 left-20 w-2 h-2 bg-emerald-500/20 rotate-45 animate-bounce" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-20 right-40 w-3 h-3 bg-orange-500/20 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Elite Header Section */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-sm font-semibold mb-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        {/* Modern Header Section */}
+          <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-20"
+        >
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-sm font-semibold mb-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
             <Award className="w-4 h-4" />
             HAKKIMIZDA
           </div>
           
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
-              Gürel{' '}
-            </span>
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Yönetim
-            </span>
+          <h2 className="text-4xl lg:text-6xl font-extrabold text-slate-900 mb-6 bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+            Gürel Yönetim ile <br className="md:hidden" /> 
+            <span className="text-slate-900">Profesyonel Çözümler</span>
           </h2>
           
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent w-20"></div>
-            <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-            <div className="h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent w-20"></div>
-          </div>
-          
-          <p className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
-            2022'den beri Balıkesir genelinde profesyonel apartman, site ve mülk yönetimi hizmetleri sunarak, 
-            mülk sahiplerinin ve site sakinlerinin yaşam kalitesini artırıyoruz.
+          <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
+            <span className="font-semibold text-blue-600">Temmuz 2022</span>&apos;den bu yana Balıkesir&apos;in <span className="font-semibold text-purple-600">9 farklı bölgesinde</span> profesyonel site yönetimi hizmetleri sunuyoruz.
           </p>
-
-      
+          
+          {/* Hızlı İstatistikler */}
+          <div className="flex flex-wrap justify-center gap-8 mt-12">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-600">50+</div>
+              <div className="text-sm text-slate-600">Aktif Site</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-600">500+</div>
+              <div className="text-sm text-slate-600">Memnun Müşteri</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-emerald-600">3+</div>
+              <div className="text-sm text-slate-600">Yıl Deneyim</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-orange-600">9</div>
+              <div className="text-sm text-slate-600">Hizmet Bölgesi</div>
+            </div>
         </div>
+        </motion.div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
-          {/* Left Column - Content */}
-          <div className="space-y-8">
-            {/* Company Introduction */}
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-3xl blur-xl"></div>
-              <div className="relative bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-xl">
+        {/* Ana İçerik Grid - Daha kompakt */}
+        <div className="grid lg:grid-cols-2 gap-20 items-start mb-20">
+          {/* Sol Kolon - İçerik */}
+          <div className="space-y-10">
+            {/* Şirket Tanıtımı - Modernize edilmiş */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
+              className="relative"
+            >
+              <div className="absolute -inset-4 rounded-3xl blur-xl bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+              <div className="relative bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-xl">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-sm font-semibold mb-6">
+                  <Calendar className="w-4 h-4" />
                   2022'DEN BERİ HİZMETİNİZDEYİZ
                 </div>
 
                 <p className="text-lg text-slate-700 mb-6 leading-relaxed">
                   <strong className="text-slate-900">Gürel Yönetim</strong>, 2022 yılından itibaren Balıkesir genelinde{' '}
                   <strong className="text-blue-600">profesyonel apartman, site ve mülk yönetimi</strong>{' '}
-                  alanında uzmanlaşmış, güvenilir ve deneyimli bir yönetim firmasıdır. Modern yönetim anlayışı ve teknoloji odaklı 
-                  çözümlerimizle mülk sahiplerinin ve site sakinlerinin yaşam kalitesini artırmayı hedefliyoruz.
+                  alanında uzmanlaşmış, güvenilir ve deneyimli bir yönetim firmasıdır.
                 </p>
 
-                <p className="text-slate-600 leading-relaxed">
-                  <strong>Gürel Yönetim olarak</strong>, toplu yaşam alanlarında{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md mx-1 text-sm">aidat yönetimi</span>,{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md mx-1 text-sm">bütçe planlaması</span>,{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-md mx-1 text-sm">bakım ve onarım süreçleri</span>,{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 rounded-md mx-1 text-sm">güvenlik hizmetleri</span>,{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-pink-100 text-pink-700 rounded-md mx-1 text-sm">temizlik organizasyonu</span>{' '}
-                  ve <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md mx-1 text-sm">mali müşavirlik desteği</span>{' '}
-                  gibi kapsamlı hizmetleri şeffaf ve profesyonel bir yaklaşımla sunuyoruz.
-                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {[
+                    { label: "Aidat Yönetimi", color: "bg-blue-100 text-blue-700" },
+                    { label: "Bütçe Planlaması", color: "bg-emerald-100 text-emerald-700" },
+                    { label: "Bakım & Onarım", color: "bg-purple-100 text-purple-700" },
+                    { label: "Güvenlik Hizmetleri", color: "bg-orange-100 text-orange-700" },
+                    { label: "Temizlik Organizasyonu", color: "bg-pink-100 text-pink-700" },
+                    { label: "Mali Müşavirlik", color: "bg-indigo-100 text-indigo-700" }
+                  ].map((service, index) => (
+                    <span key={index} className={`inline-flex items-center gap-1 px-3 py-1 ${service.color} rounded-full text-sm font-medium`}>
+                      {service.label}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Mission & Vision Tabs */}
             {renderTabs()}
 
-            {/* Principles Grid */}
-            <div>
+            {/* Principles Grid - Kompakt tasarım */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
+            >
               <h4 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
                 <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
                 Neden Gürel Yönetim?
               </h4>
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-4">
                 {principles.map((principle, index) => (
-                  <div key={index} className="group relative">
-                    <div className={`absolute -inset-1 bg-gradient-to-r ${principle.color} rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                    <div className={`relative ${principle.bgColor} rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}>
-                      <div className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r ${principle.color} rounded-xl text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="group relative"
+                  >
+                    <div className={`absolute -inset-1 bg-gradient-to-r ${principle.color} rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300`}></div>
+                    <div className={`relative ${principle.bgColor} rounded-2xl p-6 border border-white/20 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
+                      <div className="flex items-start gap-4">
+                        <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${principle.color} rounded-xl text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                         {principle.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h5 className="text-lg font-bold text-slate-900 mb-2">{principle.title}</h5>
+                          <p className="text-slate-600 text-sm leading-relaxed mb-3">{principle.description}</p>
+                          <div className="text-xs font-semibold text-slate-500">{principle.stats}</div>
+                        </div>
                       </div>
-                      <h5 className="text-lg font-bold text-slate-900 mb-2">{principle.title}</h5>
-                      <p className="text-slate-600 text-sm leading-relaxed">{principle.description}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right Column - Visual Elements */}
-          <div className="space-y-8">
-            {/* Company Images */}
-            <div className="space-y-6">
-              <div className="group relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-300 transform group-hover:-translate-y-2">
-                  <img 
-                    src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    alt="Gürel Yönetim Ofis"
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+          {/* Sağ Kolon - Görseller */}
+              <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-8"
+          >
+            {/* Şirket Görselleri - Yeniden düzenlenmiş */}
+            <div className="grid gap-6">
+              {/* Ana resim */}
+              <div className="group relative cursor-pointer">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 transform group-hover:-translate-y-2">
+                  <Image 
+                    src="/assets/newimg/gmy1.png"
+                    alt="Gürel Yönetim Ekibi"
+                    width={800}
+                    height={500}
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
-                          <Award className="w-6 h-6 text-white" />
-                        </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                      <div className="text-center text-white">
+                        <h4 className="text-xl font-bold mb-2">Profesyonel Ekibimiz</h4>
+                        <p className="text-sm opacity-90">Gürel Yönetim ekibimizle hizmet kalitesinde fark yaratıyoruz</p>
                       </div>
-                      <p className="text-white font-semibold text-lg">
-                        "Mülkünüzü değer katan profesyonel çözümlerle yönetiyoruz."
-                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="group relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-300 transform group-hover:-translate-y-2">
-                  <img 
-                    src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    alt="Gürel Yönetim Ekip"
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+              {/* Alt resimler */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="group relative cursor-pointer">
+                  <div className="relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 transform group-hover:-translate-y-1">
+                  <Image 
+                    src="/assets/newimg/gy1.png"
+                      alt="Müşteri Odaklı Hizmet"
+                      width={400}
+                      height={300}
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
-                          <Shield className="w-6 h-6 text-white" />
-                        </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute bottom-4 left-4 right-4 text-white">
+                        <p className="text-sm font-medium">Müşteri Odaklı Yaklaşım</p>
                       </div>
-                      <p className="text-white font-semibold text-lg">
-                        "Güvenilir ve şeffaf yönetim anlayışımızla yanınızdayız."
-                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="group relative cursor-pointer">
+                  <div className="relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 transform group-hover:-translate-y-1">
+                  <Image 
+                      src="/assets/newimg/gmy2.png"
+                      alt="Modern Ofis Ortamı"
+                    width={400}
+                      height={300}
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute bottom-4 left-4 right-4 text-white">
+                        <p className="text-sm font-medium">Modern Teknoloji</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Service Regions */}
+            {/* Hizmet Bölgeleri - Kompakt tasarım */}
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-orange-600/10 to-red-600/10 rounded-3xl blur-xl"></div>
-              <div className="relative bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-xl">
+              <div className="relative bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-xl">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
-                    <MapPin className="w-6 h-6 text-white" />
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
+                  <div>
                   <h4 className="text-xl font-bold text-slate-900">Hizmet Bölgelerimiz</h4>
+                    <p className="text-sm text-slate-600">Balıkesir genelinde 9 farklı bölge</p>
+                  </div>
                 </div>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {regions.map((region, index) => (
-                    <div key={index} className="group relative">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="group relative"
+                    >
+                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
                       <div className="relative bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-white/20 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-blue-500" />
-                          <span className="font-semibold text-slate-800 text-sm">{region}</span>
+                          <MapPin className="w-3 h-3 text-blue-500" />
+                          <span className="font-medium text-slate-900 text-sm">{region}</span>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
-
-                {/* Service Area Checker */}
-                <div className="bg-gradient-to-r from-slate-50 to-blue-50 rounded-2xl p-6 border border-slate-200/50">
-                  <h4 className="flex items-center gap-2 text-lg font-semibold text-slate-900 mb-4">
-                    <MapPin className="w-5 h-5 text-blue-500" />
-                    Hizmet Bölgenizde miyiz?
-                  </h4>
-                  <div className="flex gap-3 mb-4">
-                    <input 
-                      type="text" 
-                      placeholder="İlçe veya semt adını yazın"
-                      value={serviceAreaInput}
-                      onChange={(e) => setServiceAreaInput(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && checkServiceArea()}
-                      className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    />
-                    <button 
-                      onClick={checkServiceArea}
-                      className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    >
-                      Kontrol Et
-                    </button>
-                  </div>
-                  {serviceAreaResult && (
-                    <div className={`p-4 rounded-xl ${serviceAreaResult.found ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'}`}>
-                      <p className={`${serviceAreaResult.found ? 'text-emerald-800' : 'text-red-800'} font-medium`}>
-                        {serviceAreaResult.message}
-                      </p>
-                      {serviceAreaResult.found && (
-                        <div className="flex gap-3 mt-3">
-                          <a href="tel:05305556007" className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">
-                            <Phone className="w-4 h-4" />
-                            Ara
-                          </a>
-                          <a href="mailto:gurelyonetim@gmail.com" className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors duration-300">
-                            <Mail className="w-4 h-4" />
-                            Mail
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Work Process Section */}
-        <div className="mb-20">
+        {/* Çalışma Süreçleri - Daha modern */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="mb-20"
+        >
           <div className="text-center mb-16">
             <h4 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               Çalışma Süreçlerimiz
@@ -501,41 +546,58 @@ const AboutSection = () => {
           </div>
 
           <div className="relative">
-            {/* Process Flow */}
-            <div className="grid md:grid-cols-5 gap-8">
+            <div className="grid md:grid-cols-5 gap-6 lg:gap-8">
               {workProcessSteps.map((step, index) => (
-                <div key={index} className="relative group">
-                  {/* Connector Line */}
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="relative group"
+                >
+                  {/* Bağlantı Çizgisi */}
                   {index < workProcessSteps.length - 1 && (
-                    <div className="hidden md:block absolute top-16 left-full w-8 h-0.5 bg-gradient-to-r from-slate-300 to-slate-200 z-0"></div>
+                    <div className="hidden md:block absolute top-12 left-full w-6 lg:w-8 h-0.5 bg-gradient-to-r from-slate-300 to-slate-200 z-0"></div>
                   )}
                   
                   <div className="relative z-10">
-                    <div className={`absolute -inset-2 bg-gradient-to-r ${step.color} rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                    <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                      {/* Step Number */}
-                      <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                    <div className={`absolute -inset-2 bg-gradient-to-r ${step.color} rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300`}></div>
+                    <div className="relative bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                      {/* Adım Numarası */}
+                      <div className={`absolute -top-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
                         {step.number}
                       </div>
                       
-                      {/* Icon */}
-                      <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${step.color} rounded-xl text-white mb-4 mt-4 group-hover:scale-110 transition-transform duration-300`}>
+                      {/* İkon */}
+                      <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${step.color} rounded-xl text-white mb-4 mt-2 group-hover:scale-110 transition-transform duration-300`}>
                         {step.icon}
                       </div>
                       
-                      {/* Content */}
-                      <h5 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h5>
-                      <p className="text-slate-600 text-sm leading-relaxed">{step.description}</p>
+                      {/* İçerik */}
+                      <h5 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h5>
+                      <p className="text-slate-600 text-sm leading-relaxed mb-3">{step.description}</p>
+                      
+                      {/* Süre */}
+                      <div className="flex items-center gap-1 text-xs text-slate-500">
+                        <Clock className="w-3 h-3" />
+                        {step.time}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Culture Section */}
-        <div>
+        {/* Kültür Bölümü - Daha kompakt */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="text-center mb-16">
             <h4 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               Çalışma Kültürümüz
@@ -545,29 +607,36 @@ const AboutSection = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cultureValues.map((value, index) => (
-              <div key={index} className="group relative">
-                <div className={`absolute -inset-2 bg-gradient-to-r ${value.color} rounded-3xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                <div className={`relative ${value.bgPattern} rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2`}>
-                  {/* Icon */}
-                  <div className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r ${value.color} rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="group relative"
+              >
+                <div className={`absolute -inset-2 bg-gradient-to-r ${value.color} rounded-3xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300`}></div>
+                <div className={`relative ${value.bgPattern} rounded-3xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2`}>
+                  {/* İkon */}
+                  <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${value.color} rounded-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     {value.icon}
                   </div>
                   
-                  {/* Content */}
-                  <h5 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-slate-900 group-hover:to-slate-700 group-hover:bg-clip-text transition-all duration-300">
+                  {/* İçerik */}
+                  <h5 className="text-xl font-bold text-slate-900 mb-3">
                     {value.title}
                   </h5>
-                  <p className="text-slate-600 leading-relaxed">{value.description}</p>
+                  <p className="text-slate-600 leading-relaxed text-sm">{value.description}</p>
                   
-                  {/* Decorative Element */}
-                  <div className={`absolute bottom-4 right-4 w-12 h-12 bg-gradient-to-r ${value.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                  {/* Dekoratif Element */}
+                  <div className={`absolute bottom-4 right-4 w-8 h-8 bg-gradient-to-r ${value.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

@@ -29,6 +29,12 @@
       "static/chunks/src_components_sections_HeroSection_tsx.js"
     ]
   },
+  "pages\\index.tsx -> @/components/sections/InstagramSection": {
+    "id": "pages\\index.tsx -> @/components/sections/InstagramSection",
+    "files": [
+      "static/chunks/src_components_sections_InstagramSection_tsx.js"
+    ]
+  },
   "pages\\index.tsx -> @/components/sections/ServicesSection": {
     "id": "pages\\index.tsx -> @/components/sections/ServicesSection",
     "files": [
@@ -45,6 +51,12 @@
     "id": "pages\\index.tsx -> @/components/ui/FloatingButtons",
     "files": [
       "static/chunks/src_components_ui_FloatingButtons_tsx.js"
+    ]
+  },
+  "pages\\index.tsx -> @/components/ui/GoogleReviews": {
+    "id": "pages\\index.tsx -> @/components/ui/GoogleReviews",
+    "files": [
+      "static/chunks/src_components_ui_GoogleReviews_tsx.js"
     ]
   },
   "pages\\index.tsx -> @/components/ui/LoadingSpinner": {

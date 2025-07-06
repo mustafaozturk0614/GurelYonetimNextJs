@@ -24,19 +24,25 @@ export const seoConfig: DefaultSeoProps = {
     site: '@gurelyonetim',
     cardType: 'summary_large_image',
   },
+  additionalMetaTags: [
+    {
+      name: 'google-site-verification',
+      content: 'google-site-verification=1234567890',
+    },
+  ],
   additionalLinkTags: [
     {
       rel: 'icon',
-      href: '/favicon.ico',
+      href: '/logo-sy-svg.svg',
     },
     {
       rel: 'apple-touch-icon',
-      href: '/apple-touch-icon.png',
+      href: '/logo-sy-svg.svg',
       sizes: '180x180',
     },
     {
       rel: 'manifest',
-      href: '/site.webmanifest',
+      href: '/logo-sy-svg.svg',
     },
   ],
 }

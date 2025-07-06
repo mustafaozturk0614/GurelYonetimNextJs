@@ -16,13 +16,13 @@ export async function getTrustindexReviews(): Promise<ReviewStats> {
         },
       }
     );
-
+console.log("trustindex response",response);
     if (!response.ok) {
       throw new Error('API yanıt vermedi');
     }
 
     const data = await response.json();
-
+console.log("trustindex data",data);
     // Trustindex API'den gelen verileri işle
     return {
       rating: data.average_rating || 0,

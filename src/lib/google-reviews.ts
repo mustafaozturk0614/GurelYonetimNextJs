@@ -9,7 +9,9 @@ interface GoogleReview {
 const client = new Client({});
 
 // İşletmenizin Place ID'si (Google My Business'tan alabilirsiniz)
-const PLACE_ID = 'YOUR_PLACE_ID';
+// Aşağıdaki satırı kendi işletmenizin Place ID'si ile doldurun
+// Örnek: ChIJI-ZL6-mXsBQRnnk44NbOkdk
+const PLACE_ID = 'ChIJI-ZL6-mXsBQRnnk44NbOkdk'; // <-- Buraya kendi Place ID'nizi yazın
 
 // API anahtarınız (Google Cloud Console'dan alabilirsiniz)
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
