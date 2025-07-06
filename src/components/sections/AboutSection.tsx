@@ -1,12 +1,29 @@
 import { Award, Briefcase, Shield, Search, Handshake, Rocket, Users, MessageSquare, Target, GraduationCap, Heart, ShieldCheck, MapPin, CheckCircle, Phone, Mail, ArrowRight, Star, Zap, TrendingUp } from 'lucide-react'
 import { regions } from '@/data/company'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+// Tab içeriği için interface
+interface TabContent {
+  title: string;
+  icon: JSX.Element;
+  content: string;
+  color: string;
+}
 
 const AboutSection = () => {
   const [serviceAreaInput, setServiceAreaInput] = useState('')
   const [serviceAreaResult, setServiceAreaResult] = useState<{ found: boolean; message: string } | null>(null)
   const [activeTab, setActiveTab] = useState('mission')
   const [scrollY, setScrollY] = useState(0)
+
+  // Tab sistemi için yeni state'ler
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const tabContainerRef = useRef<HTMLDivElement>(null)
+
+  // Gesture kontrolü için minimum mesafe
+  const minSwipeDistance = 50
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -30,28 +47,28 @@ const AboutSection = () => {
     {
       icon: <Search className="w-7 h-7" />,
       title: "Şeffaflık",
-      description: "Tüm finansal işlemlerde tam şeffaflık ve hesap verilebilirlik",
+      description: "Tüm finansal işlemlerde tam şeffaflık, hesap verilebilirlik ve düzenli raporlama ile güven oluşturuyoruz",
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-50"
     },
     {
       icon: <Handshake className="w-7 h-7" />,
       title: "Güvenilirlik", 
-      description: "Taahhüt ettiğimiz hizmetleri zamanında ve eksiksiz sunarız",
+      description: "Taahhüt ettiğimiz hizmetleri zamanında, eksiksiz ve kaliteli bir şekilde sunarak güven ilişkisi kuruyoruz",
       color: "from-emerald-500 to-teal-500",
       bgColor: "bg-emerald-50"
     },
     {
       icon: <Award className="w-7 h-7" />,
       title: "Profesyonellik",
-      description: "Sektör tecrübesi ve uzman kadromuzla kaliteli hizmet",
+      description: "Sektör deneyimi, uzman kadro ve sürekli eğitimle desteklenen kaliteli hizmet anlayışımız",
       color: "from-purple-500 to-indigo-500",
       bgColor: "bg-purple-50"
     },
     {
       icon: <Rocket className="w-7 h-7" />,
       title: "Yenilikçilik",
-      description: "Modern teknoloji ve yönetim yaklaşımlarıyla hizmet",
+      description: "Modern teknoloji, dijital çözümler ve sürekli gelişen yönetim yaklaşımlarıyla hizmet sunuyoruz",
       color: "from-orange-500 to-red-500",
       bgColor: "bg-orange-50"
     }
@@ -99,53 +116,149 @@ const AboutSection = () => {
     {
       icon: <Users className="w-10 h-10" />,
       title: "Ekip Çalışması",
-      description: "Her çalışanımız değerli bir takım üyesidir. Birlikte çalışarak, birbirimizi destekleyerek ve bilgi paylaşımıyla en iyi sonuçları elde ederiz.",
+      description: "Her çalışanımız değerli bir takım üyesidir. Birlikte çalışarak, birbirimizi destekleyerek ve sürekli bilgi paylaşımıyla en iyi sonuçları elde ederiz. Takım ruhu ve işbirliği kültürümüzle başarıya ulaşıyoruz.",
       color: "from-blue-500 to-cyan-500",
       bgPattern: "bg-gradient-to-br from-blue-50 to-cyan-50"
     },
     {
       icon: <MessageSquare className="w-10 h-10" />,
       title: "Açık İletişim",
-      description: "Müşterilerimiz, çalışanlarımız ve iş ortaklarımızla her zaman açık, dürüst ve şeffaf iletişim kurarız.",
+      description: "Müşterilerimiz, çalışanlarımız ve iş ortaklarımızla her zaman açık, dürüst ve şeffaf iletişim kurarız. İletişimde samimiyet ve güven temel değerlerimizdir.",
       color: "from-emerald-500 to-teal-500",
       bgPattern: "bg-gradient-to-br from-emerald-50 to-teal-50"
     },
     {
       icon: <Target className="w-10 h-10" />,
       title: "Sonuç Odaklılık",
-      description: "Karşılaştığımız her soruna çözüm üretir, hedeflerimize ulaşmak için stratejik adımlar atarız.",
+      description: "Karşılaştığımız her soruna çözüm üretir, belirlediğimiz hedeflere ulaşmak için stratejik ve sistematik adımlar atarız. Başarı odaklı yaklaşımımızla fark yaratıyoruz.",
       color: "from-purple-500 to-indigo-500",
       bgPattern: "bg-gradient-to-br from-purple-50 to-indigo-50"
     },
     {
       icon: <GraduationCap className="w-10 h-10" />,
       title: "Sürekli Gelişim",
-      description: "Sektördeki yenilikleri takip eder, eğitimlerle kendimizi sürekli geliştiririz. Her deneyimi öğrenme fırsatı olarak görürüz.",
+      description: "Sektördeki yenilikleri takip eder, düzenli eğitimlerle kendimizi sürekli geliştiririz. Her deneyimi öğrenme fırsatı olarak görür, gelişime açık yaklaşımımızla ilerleriz.",
       color: "from-orange-500 to-red-500",
       bgPattern: "bg-gradient-to-br from-orange-50 to-red-50"
     },
     {
       icon: <Heart className="w-10 h-10" />,
       title: "Müşteri Memnuniyeti",
-      description: "Her kararımızda müşteri memnuniyetini ön planda tutar, beklentileri aşmak için çalışırız.",
+      description: "Her kararımızda müşteri memnuniyetini ön planda tutar, beklentileri aşmak için çalışırız. Müşteri odaklı hizmet anlayışımızla uzun vadeli ilişkiler kurarız.",
       color: "from-pink-500 to-rose-500",
       bgPattern: "bg-gradient-to-br from-pink-50 to-rose-50"
     },
     {
       icon: <ShieldCheck className="w-10 h-10" />,
       title: "Güvenilirlik",
-      description: "Sözlerimizi tutar, sorumluluklarımızı zamanında ve eksiksiz yerine getiririz. Güvenilirlik en temel değerimizdir.",
+      description: "Sözlerimizi tutar, sorumluluklarımızı zamanında ve eksiksiz yerine getiririz. Güvenilirlik en temel değerimiz olup, tüm işlerimizde dürüstlük ve tutarlılık gösteririz.",
       color: "from-slate-500 to-gray-500",
       bgPattern: "bg-gradient-to-br from-slate-50 to-gray-50"
     }
   ]
 
   const stats = [
-    { number: "15+", label: "Yıl Deneyim", icon: <Star className="w-6 h-6" /> },
-    { number: "100+", label: "Mutlu Müşteri", icon: <Heart className="w-6 h-6" /> },
-    { number: "50+", label: "Yönetilen Site", icon: <Shield className="w-6 h-6" /> },
+    { number: "2+", label: "Yıl Deneyim", icon: <Star className="w-6 h-6" /> },
+    { number: "25+", label: "Mutlu Müşteri", icon: <Heart className="w-6 h-6" /> },
+    { number: "15+", label: "Yönetilen Site", icon: <Shield className="w-6 h-6" /> },
     { number: "24/7", label: "Destek Hizmeti", icon: <Zap className="w-6 h-6" /> }
   ]
+
+  // Tab sistemi için yeni state'ler
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      setActiveTab(activeTab === 'mission' ? 'vision' : 'mission')
+    }
+    if (isRightSwipe) {
+      setActiveTab(activeTab === 'vision' ? 'mission' : 'vision')
+    }
+  }
+
+  // Tab içerikleri
+  const tabContents: Record<string, TabContent> = {
+    mission: {
+      title: "Misyonumuz",
+      icon: <Target className="w-6 h-6" />,
+      content: "Profesyonel site yönetimi alanında yenilikçi çözümler sunarak, site sakinlerinin yaşam kalitesini artırmak ve mülk değerlerini korumak için çalışıyoruz.",
+      color: "from-blue-600 to-indigo-600"
+    },
+    vision: {
+      title: "Vizyonumuz",
+      icon: <Star className="w-6 h-6" />,
+      content: "Türkiye'nin önde gelen profesyonel site yönetim şirketi olmak ve sektörde dijital dönüşümün öncüsü olmayı hedefliyoruz.",
+      color: "from-purple-600 to-pink-600"
+    }
+  }
+
+  // Tab sistemi render kodu
+  const renderTabs = () => (
+    <div 
+      ref={tabContainerRef}
+      className="w-full max-w-2xl mx-auto mb-12"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Tab Butonları */}
+      <div className="flex gap-4 mb-8 p-2 bg-white/50 backdrop-blur-sm rounded-full shadow-lg">
+        {Object.entries(tabContents).map(([key, { title, icon }]) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-full text-sm font-semibold transition-all duration-300 ${
+              activeTab === key
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg scale-105'
+                : 'text-slate-600 hover:bg-white/50'
+            }`}
+          >
+            {icon}
+            {title}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab İçeriği */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl"
+        >
+          <div className="flex items-start gap-4">
+            <div className={`flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r ${tabContents[activeTab].color} flex items-center justify-center text-white shadow-lg`}>
+              {tabContents[activeTab].icon}
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+                {tabContents[activeTab].title}
+              </h3>
+              <p className="text-slate-600 leading-relaxed">
+                {tabContents[activeTab].content}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  )
 
   return (
     <section id="about" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 py-20">
@@ -188,28 +301,11 @@ const AboutSection = () => {
           </div>
           
           <p className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
-            15 yıllık deneyimimizle Balıkesir genelinde profesyonel apartman ve site yönetimi hizmetleri sunuyoruz.
+            2022'den beri Balıkesir genelinde profesyonel apartman, site ve mülk yönetimi hizmetleri sunarak, 
+            mülk sahiplerinin ve site sakinlerinin yaşam kalitesini artırıyoruz.
           </p>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-                <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                  <div className="flex items-center justify-center mb-3">
-                    <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl text-white">
-                      {stat.icon}
-                    </div>
-                  </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-1">
-                    {stat.number}
-                  </div>
-                  <div className="text-slate-600 font-medium">{stat.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+      
         </div>
 
         {/* Main Content Grid */}
@@ -225,79 +321,27 @@ const AboutSection = () => {
                 </div>
 
                 <p className="text-lg text-slate-700 mb-6 leading-relaxed">
-                  <strong className="text-slate-900">Gürel Yönetim</strong>, Balıkesir genelinde{' '}
+                  <strong className="text-slate-900">Gürel Yönetim</strong>, 2022 yılından itibaren Balıkesir genelinde{' '}
                   <strong className="text-blue-600">profesyonel apartman, site ve mülk yönetimi</strong>{' '}
-                  alanında uzmanlaşmış, sektörde referans gösterilen bir yönetim firmasıdır.
+                  alanında uzmanlaşmış, güvenilir ve deneyimli bir yönetim firmasıdır. Modern yönetim anlayışı ve teknoloji odaklı 
+                  çözümlerimizle mülk sahiplerinin ve site sakinlerinin yaşam kalitesini artırmayı hedefliyoruz.
                 </p>
 
                 <p className="text-slate-600 leading-relaxed">
                   <strong>Gürel Yönetim olarak</strong>, toplu yaşam alanlarında{' '}
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md mx-1 text-sm">aidat yönetimi</span>,{' '}
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md mx-1 text-sm">bütçe planlaması</span>,{' '}
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-md mx-1 text-sm">bakım ve onarım süreçleri</span>{' '}
-                  gibi temel ihtiyaçları teknoloji odaklı ve şeffaf çözümlerle yönetiyoruz.
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-md mx-1 text-sm">bakım ve onarım süreçleri</span>,{' '}
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 rounded-md mx-1 text-sm">güvenlik hizmetleri</span>,{' '}
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-pink-100 text-pink-700 rounded-md mx-1 text-sm">temizlik organizasyonu</span>{' '}
+                  ve <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md mx-1 text-sm">mali müşavirlik desteği</span>{' '}
+                  gibi kapsamlı hizmetleri şeffaf ve profesyonel bir yaklaşımla sunuyoruz.
                 </p>
               </div>
             </div>
 
             {/* Mission & Vision Tabs */}
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-3xl blur-xl"></div>
-              <div className="relative bg-white/70 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl overflow-hidden">
-                {/* Tab Navigation */}
-                <div className="flex border-b border-slate-200/50">
-                  <button
-                    onClick={() => setActiveTab('mission')}
-                    className={`flex-1 px-6 py-4 text-sm font-semibold transition-all duration-300 ${
-                      activeTab === 'mission'
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                    }`}
-                  >
-                    <Target className="w-4 h-4 inline mr-2" />
-                    Misyonumuz
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('vision')}
-                    className={`flex-1 px-6 py-4 text-sm font-semibold transition-all duration-300 ${
-                      activeTab === 'vision'
-                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                    }`}
-                  >
-                    <Award className="w-4 h-4 inline mr-2" />
-                    Vizyonumuz
-                  </button>
-                </div>
-
-                {/* Tab Content */}
-                <div className="p-8">
-                  {activeTab === 'mission' ? (
-                    <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <Target className="w-5 h-5 text-blue-500" />
-                        Misyonumuz
-                      </h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Mülk sahiplerinin ve site sakinlerinin yaşam kalitesini yükseltmek, gayrimenkul değerlerini artırmak ve şeffaf,
-                        güvenilir ve profesyonel bir yönetim sistemi ile tüm paydaşlarımıza maksimum fayda sağlamaktır.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <Award className="w-5 h-5 text-emerald-500" />
-                        Vizyonumuz
-                      </h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Balıkesir genelinde profesyonel apartman ve site yönetiminin referans noktası olmak, teknoloji odaklı yönetim
-                        standartları geliştirerek sektörün gelişimine öncülük etmek ve müşteri memnuniyetinde daima ilk sırada yer almaktır.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            {renderTabs()}
 
             {/* Principles Grid */}
             <div>

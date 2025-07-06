@@ -58,4 +58,4 @@ const FloatingButtons = () => {
   )
 }
 
-export default FloatingButtons
+export default FloatingButtons;

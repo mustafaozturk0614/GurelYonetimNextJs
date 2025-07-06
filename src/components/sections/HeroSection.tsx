@@ -5,6 +5,7 @@ import { services } from '@/data/services'
 import ServiceModal from '@/components/ui/ServiceModal'
 import { Service } from '@/types'
 
+
 const HeroSection = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null)
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false)
@@ -27,15 +28,16 @@ const HeroSection = () => {
   const phoneNumber = "905305556007"
   const message = "Merhaba, Gürel Yönetim hizmetleri hakkında bilgi almak istiyorum."
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
-
+  //<source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+  //<source src="https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" type="video/mp4" />
   return (
     <>
       <section className="split-hero" id="home">
         {/* Sol Bölüm - Apartman ve Site Yönetimi */}
         <div className="split-section">
           <video className="video-background" autoPlay muted loop playsInline>
-            <source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-            <source src="https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+            <source src="../../../assets/videos/20250405_1349_Sunrise Modern Complex_storyboard_01jr2s3hqwep79q17t9mpghbxw.mp4" type="video/mp4" />
+            <source src="assets/videos/hero.mp4" type="video/mp4" />
           </video>
           <div className="split-content">
             <div className="content-wrapper">

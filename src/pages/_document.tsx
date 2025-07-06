@@ -66,6 +66,8 @@ export default function Document() {
             })
           }}
         />
+        {/* Google Yorumları Widget Script */}
+        <script defer async src="https://cdn.trustindex.io/loader.js?1c695ec493734609df46357a137" />
       </Head>
       <body>
         <Main />
