@@ -2,53 +2,86 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Menu, X, Phone, Mail } from 'lucide-react'
+import Image from 'next/image'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const router = useRouter()
+  const [currentActiveHash, setCurrentActiveHash] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    // Hash değişikliklerini dinle
+    const handleHashChange = () => {
+      setCurrentActiveHash(window.location.hash);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+
+    // İlk yüklemede hash'i ayarla
+    setCurrentActiveHash(window.location.hash);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('hashchange', handleHashChange); // Temizleme fonksiyonu
+    };
   }, [])
 
   const navigationItems = [
     { 
-      href: '/', 
+      href: '#home', 
       label: 'Ana Sayfa',
       description: 'Gürel Yönetim Ana Sayfası'
     },
     { 
-      href: '/about', 
+      href: '#about', 
       label: 'Hakkımızda',
       description: 'Şirket Bilgileri & Ekibimiz'
     },
     { 
-      href: '/services', 
+      href: '#services', 
       label: 'Hizmetlerimiz',
       description: 'Site & Apartman Yönetimi'
     },
     { 
-      href: '/portfolio', 
+      href: '#testimonials', 
       label: 'Referanslarımız',
       description: 'Başarılı Projelerimiz'
     },
     { 
-      href: '/contact', 
+      href: '#contact', 
       label: 'İletişim',
       description: 'Bize Ulaşın & Teklif Alın'
     }
   ]
 
   const isActivePage = (href: string) => {
-    if (href === '/') {
-      return router.pathname === '/'
+    // Eğer hedef #home ise, hash yoksa veya #home ise aktif kabul et
+    if (href === '#home') {
+      return currentActiveHash === '' || currentActiveHash === '#home';
     }
-    return router.pathname.startsWith(href)
+    // Diğer tüm navigasyon öğeleri için, doğrudan mevcut hash ile karşılaştır
+    return currentActiveHash === href;
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const targetId = href.substring(1) // # işaretini kaldır
+    const targetElement = document.getElementById(targetId)
+
+    if (targetElement) {
+      // Doğrudan hash'i değiştirerek Next.js router'ını atla
+      window.location.hash = targetId
+      setCurrentActiveHash(href); // Aktif hash state'ini anında güncelle
+
+      // Element'e pürüzsüz kaydırma yap
+      targetElement.scrollIntoView({ behavior: 'smooth' })
+    }
+    setIsMenuOpen(false) // Mobil menüyü kapat
   }
 
   return (
@@ -62,12 +95,14 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 group max-w-[50%] sm:max-w-[60%] md:max-w-none">
             <div className="relative flex-shrink-0">
-              <img 
-                src="/assets/svg/logo-sy-svg.svg" 
+              <Image 
+                src="/logo-sy-svg.svg" 
                 alt="Gürel Yönetim Logo" 
+                width={96}
+                height={96}
                 className="h-24 sm:h-28  xl:h-32 w-auto  transition-transform duration-300 group-hover:scale-105"
               />
-      </div>
+            </div>
             <div className="min-w-0 flex-1 flex flex-row lg:flex-col items-center lg:items-start gap-2">
               <h1 className={`text-xl font-bold transition-colors duration-300 leading-tight ${
                 isScrolled ? 'text-slate-800' : 'text-white'
@@ -85,9 +120,10 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-2">
             {navigationItems.map((item, index) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
+                onClick={(e) => handleClick(e, item.href)}
                 className={`relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 group overflow-hidden ${
                   isActivePage(item.href)
                     ? isScrolled
@@ -135,7 +171,7 @@ const Header = () => {
                     <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900/95 rotate-45 border-l border-t border-slate-700/50"></div>
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
         </nav>
 
@@ -223,7 +259,7 @@ const Header = () => {
                     : 'bg-gradient-to-r from-white/20 to-white/10'
                   : 'opacity-0'
               }`} />
-          </button>
+            </button>
           </div>
         </div>
       </div>
@@ -238,10 +274,10 @@ const Header = () => {
           <nav className="container mx-auto px-4 py-6">
             <div className="space-y-3">
               {navigationItems.map((item, index) => (
-                <Link
+                <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleClick(e, item.href)}
                   className={`group block px-5 py-4 rounded-2xl text-base font-semibold transition-all duration-300 hover:scale-105 relative overflow-hidden ${
                     isActivePage(item.href)
                       ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-xl shadow-blue-600/30 border border-blue-500/20'
@@ -290,7 +326,7 @@ const Header = () => {
                   {isActivePage(item.href) && (
                     <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-white rounded-r-full" />
                   )}
-                </Link>
+                </a>
               ))}
             </div>
             

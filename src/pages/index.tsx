@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
+import TeamSection from '@/components/sections/TeamSection'
 
 // Dynamic imports for better performance
 const Header = dynamic(() => import('@/components/layout/Header').then(mod => mod.default), {
@@ -24,6 +25,10 @@ const TestimonialsSection = dynamic(() => import('@/components/sections/Testimon
   loading: () => <div className="h-96 bg-white animate-pulse" />,
 })
 
+const GoogleReviews = dynamic(() => import('@/components/ui/GoogleReviews').then(mod => mod.default), {
+  loading: () => <div className="h-96 bg-white animate-pulse" />,
+})
+
 const ContactSection = dynamic(() => import('@/components/sections/ContactSection').then(mod => mod.default), {
   loading: () => <div className="h-96 bg-gray-900 animate-pulse" />,
 })
@@ -38,6 +43,10 @@ const FloatingButtons = dynamic(() => import('@/components/ui/FloatingButtons').
 
 const LoadingSpinner = dynamic(() => import('@/components/ui/LoadingSpinner').then(mod => mod.default), {
   ssr: false,
+})
+
+const InstagramSection = dynamic(() => import('@/components/sections/InstagramSection').then(mod => mod.default), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
 })
 
 const HomePage: NextPage = () => {
@@ -124,7 +133,10 @@ const HomePage: NextPage = () => {
           <HeroSection />
           <AboutSection />
           <ServicesSection />
+          <TeamSection />
+          <InstagramSection />
           <TestimonialsSection />
+          <GoogleReviews />
           <ContactSection />
         </main>
         <Footer />

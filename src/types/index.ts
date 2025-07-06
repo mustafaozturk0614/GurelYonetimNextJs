@@ -1,8 +1,26 @@
-export interface Service {
+import React from 'react';
+
+export interface ServiceFeature {
   icon: React.ReactNode;
+  text: string;
+}
+
+export interface ServiceBadge {
+  text: string;
+  variant: 'primary' | 'secondary' | 'accent';
+}
+
+export interface Service {
+  id: string;
   title: string;
   description: string;
-  features: string[];
+  image: string;
+  icon: React.ReactNode;
+  features: ServiceFeature[];
+  badges: ServiceBadge[];
+  detailUrl: string;
+  color: string;
+  gradient: string;
   details?: string[];
   pricing?: string;
 }
