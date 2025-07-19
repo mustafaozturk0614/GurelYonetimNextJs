@@ -1,0 +1,465 @@
+/* =====================================================
+ * Gürel Yönetim - Modern Split Hero Section
+ * Clean Design + Enhanced Readability + Video Background
+ * ===================================================== */
+
+/* CSS Variables for Split Hero */
+:root {
+  --hero-primary: #0f172a;
+  --hero-secondary: #1e40af;
+  --hero-accent: #06b6d4;
+  --hero-gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --hero-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --hero-gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --hero-shadow-soft: 0 8px 20px -5px rgba(0, 0, 0, 0.15);
+  --hero-shadow-medium: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
+  --hero-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Split Hero Styles */
+.split-hero {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.split-section {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.split-section:hover {
+  flex: 1.2;
+}
+
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.3) contrast(1.1);
+  transition: all 0.3s ease;
+}
+
+.split-section:hover .video-background {
+  filter: brightness(0.4) contrast(1.2);
+  transform: scale(1.02);
+}
+
+.split-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 3rem;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  transition: background 0.3s ease;
+}
+
+.content-wrapper {
+  max-width: 450px;
+  margin: 0 auto;
+  color: white;
+}
+
+/* Service Tag Styles - Clean */
+.service-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeInUp 0.6s 0.2s forwards;
+}
+
+/* Title Area Styles - Modern */
+.title-area {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.split-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  margin: 0.5rem 0;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: fadeInUp 0.6s 0.4s forwards;
+}
+
+.title-accent {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0.3) 100%);
+  margin-top: 1rem;
+  border-radius: 2px;
+  opacity: 0;
+  animation: expandWidth 0.6s 0.6s forwards;
+}
+
+/* Service Highlights - Modern Grid */
+.service-highlights {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s 0.8s forwards;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.highlight-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(3px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Split Description - Clean */
+.split-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 1.5rem 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeInUp 0.6s 1s forwards;
+}
+
+/* CTA Container - Compact */
+.cta-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadeInUp 0.6s 1.2s forwards;
+}
+
+/* Split CTA Buttons - Modern */
+.split-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  width: fit-content;
+}
+
+.split-cta.primary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  box-shadow: var(--hero-shadow-soft);
+}
+
+.split-cta.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.split-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hero-shadow-medium);
+}
+
+.split-cta.secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.cta-arrow {
+  transition: transform 0.3s ease;
+}
+
+.split-cta:hover .cta-arrow {
+  transform: translateX(2px);
+}
+
+/* Text Link - Minimal */
+.text-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  position: relative;
+}
+
+.text-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: white;
+  transition: width 0.3s ease;
+}
+
+.text-link:hover {
+  color: white;
+}
+
+.text-link:hover::after {
+  width: 100%;
+}
+
+/* Share Buttons - Compact */
+.share-buttons {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.share-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+
+.share-button:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.share-button.twitter {
+  background: rgba(29, 161, 242, 0.6);
+}
+
+.share-button.twitter:hover {
+  background: rgba(29, 161, 242, 0.8);
+}
+
+.share-button.linkedin {
+  background: rgba(0, 119, 181, 0.6);
+}
+
+.share-button.linkedin:hover {
+  background: rgba(0, 119, 181, 0.8);
+}
+
+.share-button.whatsapp {
+  background: rgba(37, 211, 102, 0.6);
+}
+
+.share-button.whatsapp:hover {
+  background: rgba(37, 211, 102, 0.8);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 40px;
+    opacity: 1;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .split-hero {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .split-section {
+    height: 100vh;
+  }
+
+  .split-section:hover {
+    flex: 1;
+  }
+
+  .split-content {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .split-content {
+    padding: 2rem;
+  }
+
+  .split-title {
+    font-size: 2rem;
+  }
+
+  .split-description {
+    font-size: 0.9rem;
+  }
+
+  .share-buttons {
+    position: fixed;
+    left: 0;
+    top: auto;
+    bottom: 15px;
+    transform: none;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 1rem;
+  }
+
+  .cta-container {
+    align-items: flex-start;
+  }
+
+  .split-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .service-highlights {
+    gap: 0.5rem;
+  }
+
+  .highlight-item {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .split-section {
+    height: 75vh;
+  }
+
+  .split-content {
+    padding: 1.5rem;
+  }
+
+  .split-title {
+    font-size: 1.6rem;
+  }
+
+  .service-tag {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .split-description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .content-wrapper {
+    max-width: 100%;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .service-tag,
+  .split-title,
+  .title-accent,
+  .service-highlights,
+  .split-description,
+  .cta-container {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .split-section {
+    transition: none;
+  }
+
+  .split-section:hover {
+    flex: 1;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .share-buttons {
+    display: none;
+  }
+  
+  .split-hero {
+    height: auto;
+    flex-direction: column;
+  }
+  
+  .split-section {
+    height: auto;
+    page-break-inside: avoid;
+  }
+}
